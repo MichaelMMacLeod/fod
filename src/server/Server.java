@@ -71,7 +71,11 @@ class Server {
                         boolean[] held = inputData.held;
 
                         if (held[0])
-                            poly.translate(1, 1);
+                            poly.translate(-1, 0);
+                        if (held[1])
+                            poly.translate(0, -1);
+                        if (held[2])
+                            poly.translate(1, 0);
 
                         poly.move();
 
