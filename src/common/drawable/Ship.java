@@ -14,18 +14,7 @@ public class Ship extends Poly {
         dx += vector.x;
         dy += vector.y;
 
-        center.x += dx;
-        center.y += dy;
-
-        for (Point2D.Double p : points) {
-            p.x += dx;
-            p.y += dy;
-        }
-
-        dx = 0;
-        dy = 0;
-
-        dt = 0;
+        super.move();
     }
 
     public void thrust(double force) {
