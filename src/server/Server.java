@@ -1,7 +1,7 @@
 package server;
 
 import common.drawable.Poly;
-import common.message.Message;
+import common.message.ShapeData;
 
 import java.awt.*;
 import java.io.IOException;
@@ -61,7 +61,7 @@ class Server {
 //                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
                 while (true) {
-                    out.writeObject(new Message(new Point(0, 0), getShapes()));
+                    out.writeObject(new ShapeData(new Point(0, 0), getShapes()));
                 }
 
             } catch (IOException e) {

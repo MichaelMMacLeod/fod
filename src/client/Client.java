@@ -1,8 +1,7 @@
 package client;
 
 import client.gui.GamePanel;
-import common.drawable.Poly;
-import common.message.Message;
+import common.message.ShapeData;
 import server.FODServer;
 
 import java.io.IOException;
@@ -30,8 +29,8 @@ public class Client extends Thread {
 
             while (true) {
                 try {
-                    Message message = (Message) in.readObject();
-                    gamePanel.updateVisuals(message.focus, message.shapes);
+                    ShapeData shapeData = (ShapeData) in.readObject();
+                    gamePanel.updateVisuals(shapeData.focus, shapeData.shapes);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
