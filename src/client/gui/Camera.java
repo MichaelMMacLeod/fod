@@ -7,13 +7,13 @@ import java.awt.*;
 final class Camera {
     private Camera() {}
 
-    static void draw(Graphics g, Point focus, Drawable[] drawables) {
+    static void draw(Graphics g, Point focus, Drawable[] drawables, int width, int height) {
         for (Drawable shape : drawables) {
             Point[] points = shape.getPoints();
 
             for (Point p : points) {
-                p.x -= focus.x;
-                p.y -= focus.y;
+                p.x -= focus.x - width / 2;
+                p.y -= focus.y - height / 2;
             }
 
             int[] xpoints = new int[points.length];

@@ -19,7 +19,6 @@ public class GamePanel extends JPanel {
     }
 
     public void updateVisuals(Point focus, Poly[] shapes) {
-        System.out.println("updated visuals");
         this.focus = focus;
         this.shapes = shapes;
     }
@@ -28,7 +27,7 @@ public class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Camera.draw(g, focus, shapes);
+        Camera.draw(g, focus, shapes, getWidth(), getHeight());
     }
 
     @Override
