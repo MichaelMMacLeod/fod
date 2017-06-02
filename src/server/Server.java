@@ -1,6 +1,7 @@
 package server;
 
 import common.drawable.Poly;
+import common.message.InputData;
 import common.message.ShapeData;
 
 import java.awt.*;
@@ -63,9 +64,18 @@ class Server {
         public void run() {
             try {
                 while (true) {
-                    out.writeObject(new ShapeData(new Point(0, 0), getShapes()));
+                    out.writeObject(new ShapeData(poly.getPoints()[0], getShapes()));
                     try {
-                        System.out.println(in.readObject());
+                        InputData inputData = (InputData) in.readObject();
+
+                        boolean[] held = inputData.held;
+
+                        if (held[0])
+                            poly.translate(1, 1);
+
+                        poly.move();
+
+                        System.out.println(poly.getPoints()[0].x);
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
