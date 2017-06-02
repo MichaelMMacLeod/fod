@@ -1,7 +1,7 @@
 package client.gui;
 
 import client.input.InputManager;
-import common.drawable.Poly;
+import common.drawable.Drawable;
 import common.message.InputData;
 
 import javax.swing.*;
@@ -13,7 +13,7 @@ public class GamePanel extends JPanel {
     private final InputManager inputManager;
     private final String[] keys = {"a", "w", "d"};
 
-    private Poly[] shapes;
+    private Drawable[] shapes;
     private Point focus;
 
     public GamePanel(int width, int height) {
@@ -24,10 +24,10 @@ public class GamePanel extends JPanel {
         for (String s : keys)
             inputManager.addKey(s);
 
-        shapes = new Poly[0];
+        shapes = new Drawable[0];
     }
 
-    public void updateVisuals(Point focus, Poly[] shapes) {
+    public void updateVisuals(Point focus, Drawable[] shapes) {
         this.focus = focus;
         this.shapes = shapes;
     }

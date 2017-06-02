@@ -1,7 +1,6 @@
 package client;
 
 import client.gui.GamePanel;
-import common.message.InputData;
 
 import javax.swing.*;
 import java.awt.*;
