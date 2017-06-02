@@ -1,0 +1,62 @@
+package client;
+
+import client.gui.GamePanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+
+public class FODClient {
+    private static final int MS_PER_UPDATE = 10;
+
+    private static GamePanel gamePanel;
+
+    public static void main(String[] args) throws IOException {
+        System.setProperty("sun.java2d.opengl", "true");
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+
+        gamePanel = new GamePanel(width, height);
+
+        SwingUtilities.invokeLater(FODClient::startGUI);
+
+        Client client = new Client(gamePanel, args[0]);
+
+        gameLoop();
+    }
+
+    private static void gameLoop() {
+        double previous = System.currentTimeMillis();
+        double lag = 0;
+
+        while (true) {
+            double current = System.currentTimeMillis();
+            double elapsed = current - previous;
+            previous = current;
+            lag += elapsed;
+
+            while (lag >= MS_PER_UPDATE) {
+                gamePanel.repaint();
+                lag -= MS_PER_UPDATE;
+            }
+        }
+    }
+
+    private static void startGUI() {
+        JFrame frame = new JFrame("FOD");
+
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setUndecorated(false);
+
+        gamePanel.setBackground(Color.WHITE);
+
+        frame.add(gamePanel);
+        frame.pack();
+
+        frame.setLocationRelativeTo(null);
+
+        frame.setVisible(true);
+    }
+}

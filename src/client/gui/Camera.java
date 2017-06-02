@@ -7,7 +7,7 @@ import java.awt.*;
 final class Camera {
     private Camera() {}
 
-    static void draw(Graphics g, Drawable[] drawables, Point focus) {
+    static void draw(Graphics g, Point focus, Drawable[] drawables) {
         for (Drawable shape : drawables) {
             Point[] points = shape.getPoints();
 

@@ -1,52 +1,43 @@
 package client;
 
 import client.gui.GamePanel;
+import common.drawable.Poly;
+import common.message.Message;
 import server.FODServer;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client {
-    private static GamePanel gamePanel;
+public class Client extends Thread {
+    private GamePanel gamePanel;
+    private Socket socket;
 
-    public static void main(String[] args) throws IOException {
-        Client client = new Client();
-        client.connect(args[0]);
+    Client(GamePanel gamePanel, String ip) throws IOException {
+        this.gamePanel = gamePanel;
 
-        System.setProperty("sun.java2d.opengl", "true");
+        socket = new Socket(ip, FODServer.PORT);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) screenSize.getWidth();
-        int height = (int) screenSize.getHeight();
+        start();
+    }
 
-        gamePanel = new GamePanel(width, height);
+    @Override
+    public void run() {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                startGUI();
+            while (true) {
+                try {
+                    Message message = (Message) in.readObject();
+                    gamePanel.updateVisuals(message.focus, message.shapes);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
-        });
-    }
-
-    private void connect(String ip) throws IOException {
-        Socket socket = new Socket(ip, FODServer.PORT);
-    }
-
-    private static void startGUI() {
-        JFrame frame = new JFrame("Sonder");
-
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setUndecorated(false);
-
-        gamePanel.setBackground(Color.WHITE);
-
-        frame.add(gamePanel);
-        frame.pack();
-
-        frame.setLocationRelativeTo(null);
-
-        frame.setVisible(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

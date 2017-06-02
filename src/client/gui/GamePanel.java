@@ -1,21 +1,34 @@
 package client.gui;
 
+import common.drawable.Poly;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
     private final int width, height;
 
+    private Poly[] shapes;
+    private Point focus;
+
     public GamePanel(int width, int height) {
         this.width = width;
         this.height = height;
+
+        shapes = new Poly[0];
+    }
+
+    public void updateVisuals(Point focus, Poly[] shapes) {
+        System.out.println("updated visuals");
+        this.focus = focus;
+        this.shapes = shapes;
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Camera.draw(g);
+        Camera.draw(g, focus, shapes);
     }
 
     @Override
