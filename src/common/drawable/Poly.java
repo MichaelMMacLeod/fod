@@ -4,10 +4,12 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class Poly implements Drawable, Moveable {
-    private Point2D.Double center;
-    private Point2D.Double[] points;
+    protected Point2D.Double center;
+    protected Point2D.Double[] points;
 
-    private double dx, dy;
+    protected double rotation;
+
+    protected double dx, dy, dt;
 
     public Poly() {
         center = new Point2D.Double(0, 0);
@@ -30,12 +32,20 @@ public class Poly implements Drawable, Moveable {
 
         dx = 0;
         dy = 0;
+
+        dt = 0;
     }
 
     @Override
     public void translate(double dx, double dy) {
         this.dx += dx;
         this.dy += dy;
+    }
+
+    @Override
+    public void rotate(double dt) {
+        this.dt += dt;
+        rotation += dt;
     }
 
     @Override
@@ -47,5 +57,20 @@ public class Poly implements Drawable, Moveable {
         }
 
         return ints;
+    }
+
+    @Override
+    public double getDX() {
+        return dx;
+    }
+
+    @Override
+    public double getDY() {
+        return dy;
+    }
+
+    @Override
+    public double getDT() {
+        return dt;
     }
 }

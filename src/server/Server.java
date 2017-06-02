@@ -1,6 +1,7 @@
 package server;
 
 import common.drawable.Poly;
+import common.drawable.Ship;
 import common.message.InputData;
 import common.message.ShapeData;
 
@@ -42,7 +43,7 @@ class Server {
         private ObjectOutputStream out;
         private ObjectInputStream in;
 
-        private Poly poly;
+        private Ship ship;
 
         Connection(Socket socket) throws IOException {
             this.socket = socket;
@@ -51,39 +52,36 @@ class Server {
 
             System.out.println("Client connected: " + socket);
 
-            poly = new Poly();
+            ship = new Ship();
 
             start();
         }
 
         Poly getPoly() {
-            return poly;
+            return ship;
         }
 
         @Override
         public void run() {
             try {
                 while (true) {
-                    out.writeObject(new ShapeData(poly.getPoints()[0], getShapes()));
+                    out.writeObject(new ShapeData(ship.getPoints()[0], getShapes()));
                     try {
                         InputData inputData = (InputData) in.readObject();
 
                         boolean[] held = inputData.held;
 
-                        if (held[0])
-                            poly.translate(-1, 0);
                         if (held[1])
-                            poly.translate(0, -1);
+                            ship.thrust(0.1);
+                        if (held[0])
+                            ship.rotate(0.1);
                         if (held[2])
-                            poly.translate(1, 0);
+                            ship.rotate(-0.1);
 
-                        poly.move();
-
-                        System.out.println(poly.getPoints()[0].x);
+                        ship.move();
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-
                 }
 
             } catch (IOException e) {
