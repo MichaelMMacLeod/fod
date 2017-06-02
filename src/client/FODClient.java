@@ -1,6 +1,7 @@
 package client;
 
 import client.gui.GamePanel;
+import common.message.InputData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,8 @@ public class FODClient {
     private static final int MS_PER_UPDATE = 10;
 
     private static GamePanel gamePanel;
+
+    private static Client client;
 
     public static void main(String[] args) throws IOException {
         System.setProperty("sun.java2d.opengl", "true");
@@ -22,7 +25,7 @@ public class FODClient {
 
         SwingUtilities.invokeLater(FODClient::startGUI);
 
-        Client client = new Client(gamePanel, args[0]);
+        client = new Client(gamePanel, args[0]);
 
         gameLoop();
     }
@@ -38,6 +41,12 @@ public class FODClient {
             lag += elapsed;
 
             while (lag >= MS_PER_UPDATE) {
+                try {
+                    client.transmit(gamePanel.getInputData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 gamePanel.repaint();
                 lag -= MS_PER_UPDATE;
             }

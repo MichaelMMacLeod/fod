@@ -1,6 +1,7 @@
 package client;
 
 import client.gui.GamePanel;
+import common.message.InputData;
 import common.message.ShapeData;
 import server.FODServer;
 
@@ -11,22 +12,28 @@ import java.net.Socket;
 
 public class Client extends Thread {
     private GamePanel gamePanel;
+
     private Socket socket;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
     Client(GamePanel gamePanel, String ip) throws IOException {
         this.gamePanel = gamePanel;
 
         socket = new Socket(ip, FODServer.PORT);
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
 
         start();
+    }
+
+    void transmit(InputData inputData) throws IOException {
+        out.writeObject(inputData);
     }
 
     @Override
     public void run() {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
             while (true) {
                 try {
                     ShapeData shapeData = (ShapeData) in.readObject();

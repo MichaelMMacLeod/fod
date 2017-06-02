@@ -6,7 +6,7 @@ A multiplayer spaceship arena
 ```
    java FODServer  
 ```
-3. Start some clients
+3. Start the client
 ```
    java FODClient <server ip adress>
 ```

@@ -5,6 +5,7 @@ import common.message.ShapeData;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -37,11 +38,15 @@ class Server {
 
     private static class Connection extends Thread {
         private Socket socket;
+        private ObjectOutputStream out;
+        private ObjectInputStream in;
 
         private Poly poly;
 
-        Connection(Socket socket) {
+        Connection(Socket socket) throws IOException {
             this.socket = socket;
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
 
             System.out.println("Client connected: " + socket);
 
@@ -57,11 +62,14 @@ class Server {
         @Override
         public void run() {
             try {
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
                 while (true) {
                     out.writeObject(new ShapeData(new Point(0, 0), getShapes()));
+                    try {
+                        System.out.println(in.readObject());
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
             } catch (IOException e) {

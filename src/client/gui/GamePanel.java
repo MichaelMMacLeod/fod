@@ -1,12 +1,17 @@
 package client.gui;
 
+import client.input.InputManager;
 import common.drawable.Poly;
+import common.message.InputData;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
     private final int width, height;
+
+    private final InputManager inputManager;
+    private final String[] keys = {"a", "w", "d"};
 
     private Poly[] shapes;
     private Point focus;
@@ -15,12 +20,28 @@ public class GamePanel extends JPanel {
         this.width = width;
         this.height = height;
 
+        inputManager = new InputManager(this);
+        for (String s : keys)
+            inputManager.addKey(s);
+
         shapes = new Poly[0];
     }
 
     public void updateVisuals(Point focus, Poly[] shapes) {
         this.focus = focus;
         this.shapes = shapes;
+    }
+
+    public InputData getInputData() {
+        boolean[] pressed = new boolean[keys.length];
+        for (int i = 0; i < pressed.length; i++)
+            pressed[i] = inputManager.pressed(keys[i]);
+
+        boolean[] held = new boolean[keys.length];
+        for (int i = 0; i < held.length; i++)
+            held[i] = inputManager.held(keys[i]);
+
+        return new InputData(keys, pressed, held);
     }
 
     @Override
