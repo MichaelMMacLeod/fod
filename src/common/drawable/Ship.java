@@ -28,7 +28,6 @@ public class Ship extends Poly implements VectorMovement {
         double cos = Math.cos(dt), sin = Math.sin(dt);
 
         for (Point2D.Double point : points) {
-            System.out.println(center);
             Point2D.Double prime = new Point2D.Double(point.x - center.x, point.y - center.y);
             point.setLocation(
                     prime.x * cos - prime.y * sin + center.x,
