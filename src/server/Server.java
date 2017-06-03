@@ -22,11 +22,8 @@ class Server extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Listening for connections (ongoing)");
         try {
-            while (true) {
-                clients.add(new Connection(server.accept()));
-            }
+            listenForConnections();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -38,22 +35,40 @@ class Server extends Thread {
         }
     }
 
-    void update() {
+    private void listenForConnections() throws IOException {
+        System.out.println("Began listening for connections.");
+        while (true) {
+            clients.add(new Connection(server.accept()));
+        }
+    }
+
+    private Ship[] getShips() {
         Ship[] ships = new Ship[clients.size()];
+
         for (int i = 0; i < ships.length; i++)
             ships[i] = clients.get(i).getShip();
 
-        InputData[] data = new InputData[clients.size()];
-        for (int i = 0; i < data.length; i++) {
+        return ships;
+    }
+
+    private InputData[] getInputData() {
+        InputData[] inputData = new InputData[clients.size()];
+
+        for (int i = 0; i < inputData.length; i++) {
             try {
-                data[i] = clients.get(i).getInputData();
-            } catch (ClassNotFoundException | IOException e) {
+                inputData[i] = clients.get(i).getInputData();
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                inputData[i] = null;
             }
         }
 
-        for (int i = 0; i < clients.size(); i++) {
-            boolean[] held = data[i].held;
+        return inputData;
+    }
+
+    private void updateShips(Ship[] ships, InputData[] inputData) {
+        for (int i = 0; i < inputData.length; i++) {
+            boolean[] held = inputData[i].held;
             Ship ship = ships[i];
 
             if (held[0])
@@ -63,17 +78,34 @@ class Server extends Thread {
             if (held[2])
                 ship.rotate(-0.05);
         }
+    }
 
-        Drawable[] shapes = new Drawable[clients.size()];
-        for (int i = 0; i < shapes.length; i++)
-            shapes[i] = ships[i];
+    private ShapeData[] createClientMessages(Ship[] ships) {
+        ShapeData[] shapeData = new ShapeData[ships.length];
 
+        for (int i = 0; i < shapeData.length; i++)
+            shapeData[i] = new ShapeData(ships[i].getCenter(), ships);
+
+        return shapeData;
+    }
+
+    private void updateConnections(ShapeData[] data) {
         for (int i = 0; i < clients.size(); i++) {
             try {
-                clients.get(i).sendShapeData(new ShapeData(ships[i].getCenter(), shapes));
+                clients.get(i).sendShapeData(data[i]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    void update() {
+        Ship[] ships = getShips();
+
+        InputData[] inputData = getInputData();
+
+        updateShips(ships, inputData);
+
+        updateConnections(createClientMessages(ships));
     }
 }
