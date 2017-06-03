@@ -11,8 +11,6 @@ final class Camera {
         for (Drawable shape : drawables) {
             Point[] points = shape.getPoints();
 
-            System.out.println(focus);
-
             for (Point p : points) {
                 p.x = p.x + width / 2;
                 p.y = p.y + height / 2;

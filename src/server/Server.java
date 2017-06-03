@@ -77,6 +77,8 @@ class Server extends Thread {
                 ship.thrust(0.05);
             if (held[2])
                 ship.rotate(-0.05);
+
+            ship.transform();
         }
     }
 
@@ -103,6 +105,9 @@ class Server extends Thread {
         Ship[] ships = getShips();
 
         InputData[] inputData = getInputData();
+
+        for (Ship i : ships)
+            System.out.println(i.getCenter());
 
         updateShips(ships, inputData);
 
