@@ -72,11 +72,11 @@ class Server extends Thread {
             Ship ship = ships[i];
 
             if (held[0])
-                ship.rotate(0.05);
+                ship.rotate(-0.05);
             if (held[1])
                 ship.thrust(0.05);
             if (held[2])
-                ship.rotate(-0.05);
+                ship.rotate(0.05);
 
             ship.transform();
         }
@@ -92,7 +92,7 @@ class Server extends Thread {
     }
 
     private void updateConnections(ShapeData[] data) {
-        for (int i = 0; i < clients.size(); i++) {
+        for (int i = 0; i < data.length; i++) {
             try {
                 clients.get(i).sendShapeData(data[i]);
             } catch (IOException e) {
@@ -105,9 +105,6 @@ class Server extends Thread {
         Ship[] ships = getShips();
 
         InputData[] inputData = getInputData();
-
-        for (Ship i : ships)
-            System.out.println(i.getPoints()[0]);
 
         updateShips(ships, inputData);
 

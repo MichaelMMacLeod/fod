@@ -34,7 +34,7 @@ class Connection {
 
     void sendShapeData(ShapeData data) throws IOException {
         out.writeObject(data);
-        out.reset();
+        out.reset(); // TODO: fix this shitty code
     }
 
     InputData getInputData() throws ClassNotFoundException, IOException{
