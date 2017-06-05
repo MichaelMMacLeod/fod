@@ -107,7 +107,7 @@ class Server extends Thread {
         InputData[] inputData = getInputData();
 
         for (Ship i : ships)
-            System.out.println(i.getCenter());
+            System.out.println(i.getPoints()[0]);
 
         updateShips(ships, inputData);
 

@@ -37,6 +37,7 @@ public class Client extends Thread {
             while (true) {
                 try {
                     ShapeData shapeData = (ShapeData) in.readObject();
+                    System.out.println(shapeData.shapes[0].getPoints()[0]);
                     gamePanel.updateVisuals(shapeData.focus, shapeData.shapes);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
