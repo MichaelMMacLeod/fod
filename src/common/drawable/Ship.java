@@ -1,5 +1,6 @@
 package common.drawable;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class Ship extends Poly implements VectorMovement {
@@ -10,6 +11,12 @@ public class Ship extends Poly implements VectorMovement {
     private double rotation;
 
     public Ship() {
+        this(Color.BLACK);
+    }
+
+    public Ship(Color outlineColor) {
+        super(outlineColor);
+
         vector = new Point2D.Double(0, 0);
     }
 

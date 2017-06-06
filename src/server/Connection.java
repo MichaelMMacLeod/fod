@@ -4,6 +4,7 @@ import common.drawable.Ship;
 import common.message.InputData;
 import common.message.ShapeData;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,7 +26,8 @@ class Connection {
 
         System.out.println("Client connected at " + socket);
 
-        ship = new Ship();
+        // random color credit: https://stackoverflow.com/questions/4246351/creating-random-colour-in-java
+        ship = new Ship(new Color((int) (Math.random() * 0x1000000)));
     }
 
     Ship getShip() {

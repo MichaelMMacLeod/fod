@@ -7,5 +7,10 @@ public interface Drawable extends Serializable {
     /**
      * @return the points which make up the drawable.
      */
-    public Point[] getPoints();
+    Point[] getPoints();
+
+    /**
+     * @return the java.awt.Color which outlines the drawable.
+     */
+    Color getOutlineColor();
 }
