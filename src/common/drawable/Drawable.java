@@ -12,5 +12,5 @@ public interface Drawable extends Serializable {
     /**
      * @return the java.awt.Color which outlines the drawable.
      */
-    Color getOutlineColor();
+    Color getFillColor();
 }

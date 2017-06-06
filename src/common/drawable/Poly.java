@@ -8,20 +8,20 @@ public class Poly implements Drawable {
 
     Point2D.Double[] points;
 
-    Color outlineColor;
+    Color fillColor;
 
     Poly() {
         this(Color.BLACK);
     }
 
-    Poly(Color outlineColor) {
+    Poly(Color fillColor) {
         center = new Point2D.Double(0, 0);
         points = new Point2D.Double[] {
                 new Point2D.Double(-20, -20),
                 new Point2D.Double(20, 0),
                 new Point2D.Double(-20, 20)
         };
-        this.outlineColor = outlineColor;
+        this.fillColor = fillColor;
     }
 
     public Point getCenter() {
@@ -40,7 +40,7 @@ public class Poly implements Drawable {
     }
 
     @Override
-    public Color getOutlineColor() {
-        return outlineColor;
+    public Color getFillColor() {
+        return fillColor;
     }
 }

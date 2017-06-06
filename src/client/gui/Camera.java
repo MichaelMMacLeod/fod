@@ -24,7 +24,10 @@ final class Camera {
                 ypoints[i] = points[i].y;
             }
 
-            g.setColor(shape.getOutlineColor());
+            g.setColor(shape.getFillColor());
+            g.fillPolygon(xpoints, ypoints, points.length);
+
+            g.setColor(Color.BLACK);
             g.drawPolygon(xpoints, ypoints, points.length);
         }
     }
