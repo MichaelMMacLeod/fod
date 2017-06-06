@@ -12,8 +12,8 @@ final class Camera {
             Point[] points = shape.getPoints();
 
             for (Point p : points) {
-                p.x = p.x + width / 2;
-                p.y = p.y + height / 2;
+                p.x = p.x - focus.x + width / 2;
+                p.y = p.y - focus.y + height / 2;
             }
 
             int[] xpoints = new int[points.length];
