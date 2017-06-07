@@ -1,5 +1,6 @@
 package common.drawable;
 
+import javax.net.ssl.SSLContext;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
@@ -9,6 +10,8 @@ public class Bullet extends Poly implements VectorMovement {
     private double dx, dy, dt;
 
     private double rotation;
+
+    private final double creationTime;
 
     public Bullet(Point2D.Double vector, Color color) {
         super(color,
@@ -21,6 +24,12 @@ public class Bullet extends Poly implements VectorMovement {
                 });
 
         this.vector = vector;
+
+        creationTime = System.currentTimeMillis();
+    }
+
+    public boolean shouldBeRemoved() {
+        return System.currentTimeMillis() - creationTime > 10000;
     }
 
     public Point2D.Double getVector() {

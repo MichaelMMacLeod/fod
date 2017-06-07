@@ -89,8 +89,13 @@ class Server extends Thread {
             ship.transform();
         }
 
-        for (Bullet bullet : bullets) {
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet bullet = bullets.get(i);
+
             bullet.transform();
+
+            if (bullet.shouldBeRemoved())
+                bullets.remove(bullets.size() - 1);
         }
     }
 
