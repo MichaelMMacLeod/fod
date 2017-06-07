@@ -4,11 +4,11 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class Poly implements Drawable {
-    Point2D.Double center;
+    final Point2D.Double center;
 
-    Point2D.Double[] points;
+    final Point2D.Double[] points;
 
-    Color fillColor;
+    private Color fillColor;
 
     Poly() {
         this(Color.BLACK);

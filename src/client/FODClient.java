@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class FODClient {
+class FODClient {
     private static final int MS_PER_UPDATE = 10;
 
     private static GamePanel gamePanel;

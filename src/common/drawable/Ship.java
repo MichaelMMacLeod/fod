@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 public class Ship extends Poly implements VectorMovement {
-    private Point2D.Double vector;
+    private final Point2D.Double vector;
 
     private double dx, dy, dt;
 

@@ -12,8 +12,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 class Connection extends Thread {
-    private Socket socket;
-
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
@@ -23,7 +21,7 @@ class Connection extends Thread {
     private ShapeData outputData;
 
     Connection(Socket socket) throws IOException {
-        this.socket = socket;
+        Socket socket1 = socket;
 
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
@@ -84,14 +82,5 @@ class Connection extends Thread {
 
     Ship getShip() {
         return ship;
-    }
-
-    void sendShapeData(ShapeData data) throws IOException {
-        out.writeObject(data);
-        out.reset(); // TODO: fix this shitty code
-    }
-
-    InputData getInputData() throws ClassNotFoundException, IOException{
-        return (InputData) in.readObject();
     }
 }

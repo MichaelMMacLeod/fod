@@ -5,13 +5,11 @@ import common.message.InputData;
 import common.message.ShapeData;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 class Server extends Thread {
-    private ArrayList<Connection> clients = new ArrayList<>();
+    private final ArrayList<Connection> clients = new ArrayList<>();
 
     private ServerSocket server;
 
@@ -43,15 +41,6 @@ class Server extends Thread {
         }
     }
 
-    private ArrayList<InputData[]> getInputData() {
-        ArrayList<InputData[]> inputData = new ArrayList<>();
-
-        for (Connection c : clients)
-            inputData.add(c.getQueuedInputData());
-
-        return inputData;
-    }
-
     private void updateShips(Ship[] ships, ArrayList<InputData[]> inputData) {
         for (int i = 0; i < inputData.size(); i++) {
             Ship ship = ships[i];
@@ -72,21 +61,6 @@ class Server extends Thread {
             }
 
             ship.transform();
-        }
-    }
-
-    private ShapeData[] createClientMessages(Ship[] ships) {
-        ShapeData[] shapeData = new ShapeData[ships.length];
-
-        for (int i = 0; i < shapeData.length; i++)
-            shapeData[i] = new ShapeData(ships[i].getCenter(), ships);
-
-        return shapeData;
-    }
-
-    private void updateConnections(ShapeData[] data) {
-        for (int i = 0; i < data.length; i++) {
-            clients.get(i).setOutputData(data[i]);
         }
     }
 

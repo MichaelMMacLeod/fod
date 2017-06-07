@@ -1,23 +1,23 @@
 package common.drawable;
 
-public interface Moveable {
+interface Moveable {
     /**
      * Applies the current transformation.
      */
-    public void transform();
+    void transform();
 
     /**
      * Removes all of the current transformations.
      */
-    public void removeTransformation();
+    void removeTransformation();
 
     /**
      * Adds a translation to the current transformation.
      */
-    public void translate(double dx, double dy);
+    void translate(double dx, double dy);
 
     /**
      * Adds a rotation to the current transformation.
      */
-    public void rotate(double dt);
+    void rotate(double dt);
 }

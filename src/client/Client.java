@@ -10,17 +10,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client extends Thread {
-    private GamePanel gamePanel;
+class Client extends Thread {
+    private final GamePanel gamePanel;
 
-    private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
     Client(GamePanel gamePanel, String ip) throws IOException {
         this.gamePanel = gamePanel;
 
-        socket = new Socket(ip, FODServer.PORT);
+        Socket socket = new Socket(ip, FODServer.PORT);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
 
