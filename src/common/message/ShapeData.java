@@ -13,4 +13,11 @@ public class ShapeData implements Serializable {
         this.focus = focus;
         this.shapes = shapes;
     }
+
+    /**
+     * Creates a blank message.
+     */
+    public ShapeData() {
+        this(new Point(0, 0), new Drawable[0]);
+    }
 }

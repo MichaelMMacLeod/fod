@@ -5,8 +5,10 @@ import common.message.InputData;
 import common.message.ShapeData;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class Server extends Thread {
     private ArrayList<Connection> clients = new ArrayList<>();
@@ -41,41 +43,33 @@ class Server extends Thread {
         }
     }
 
-    private Ship[] getShips() {
-        Ship[] ships = new Ship[clients.size()];
+    private ArrayList<InputData[]> getInputData() {
+        ArrayList<InputData[]> inputData = new ArrayList<>();
 
-        for (int i = 0; i < ships.length; i++)
-            ships[i] = clients.get(i).getShip();
-
-        return ships;
-    }
-
-    private InputData[] getInputData() {
-        InputData[] inputData = new InputData[clients.size()];
-
-        for (int i = 0; i < inputData.length; i++) {
-            try {
-                inputData[i] = clients.get(i).getInputData();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                inputData[i] = null;
-            }
-        }
+        for (Connection c : clients)
+            inputData.add(c.getQueuedInputData());
 
         return inputData;
     }
 
-    private void updateShips(Ship[] ships, InputData[] inputData) {
-        for (int i = 0; i < inputData.length; i++) {
-            boolean[] held = inputData[i].held;
+    private void updateShips(Ship[] ships, ArrayList<InputData[]> inputData) {
+        for (int i = 0; i < inputData.size(); i++) {
             Ship ship = ships[i];
 
-            if (held[0])
-                ship.rotate(-0.05);
-            if (held[1])
-                ship.thrust(0.05);
-            if (held[2])
-                ship.rotate(0.05);
+            for (int j = 0; j < inputData.get(i).length; j++) {
+                try {
+                    boolean[] held = inputData.get(i)[j].held;
+
+                    if (held[0])
+                        ship.rotate(-0.05);
+                    if (held[1])
+                        ship.thrust(0.05);
+                    if (held[2])
+                        ship.rotate(0.05);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             ship.transform();
         }
@@ -92,21 +86,42 @@ class Server extends Thread {
 
     private void updateConnections(ShapeData[] data) {
         for (int i = 0; i < data.length; i++) {
-            try {
-                clients.get(i).sendShapeData(data[i]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            clients.get(i).setOutputData(data[i]);
         }
     }
 
     void update() {
-        Ship[] ships = getShips();
+        // Get all ships
 
-        InputData[] inputData = getInputData();
+        Ship[] ships = new Ship[clients.size()];
+
+        for (int i = 0; i < ships.length; i++)
+            ships[i] = clients.get(i).getShip();
+
+        // Get all input data
+
+        ArrayList<InputData[]> inputData = new ArrayList<>();
+
+        for (Connection c : clients) {
+            InputData[] data = c.getQueuedInputData();
+            inputData.add(data);
+
+            c.removeQueuedInputData(data.length - 1);
+        }
+
+
+        // Update the world
 
         updateShips(ships, inputData);
 
-        updateConnections(createClientMessages(ships));
+        // Transmit shape data to clients
+
+        ShapeData[] shapeData = new ShapeData[ships.length];
+
+        for (int i = 0; i < shapeData.length; i++)
+            shapeData[i] = new ShapeData(ships[i].getCenter(), ships);
+
+        for (int i = 0; i < shapeData.length; i++)
+            clients.get(i).setOutputData(shapeData[i]);
     }
 }
