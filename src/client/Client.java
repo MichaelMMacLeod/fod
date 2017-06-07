@@ -13,13 +13,16 @@ import java.net.Socket;
 class Client extends Thread {
     private final GamePanel gamePanel;
 
+    final Socket socket;
+
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
     Client(GamePanel gamePanel, String ip) throws IOException {
         this.gamePanel = gamePanel;
 
-        Socket socket = new Socket(ip, FODServer.PORT);
+        socket = new Socket(ip, FODServer.PORT);
+
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
 
@@ -27,15 +30,19 @@ class Client extends Thread {
     }
 
     void transmit(InputData inputData) throws IOException {
-        out.writeObject(inputData);
+        if (!socket.isClosed())
+            out.writeObject(inputData);
+        else
+            System.exit(0);
     }
 
     @Override
     public void run() {
         try {
-            while (true) {
+            while (!socket.isClosed()) {
                 try {
                     ShapeData shapeData = (ShapeData) in.readObject();
+
                     gamePanel.updateVisuals(shapeData.focus, shapeData.shapes);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();

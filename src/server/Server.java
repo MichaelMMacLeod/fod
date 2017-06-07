@@ -55,6 +55,11 @@ class Server extends Thread {
                         ship.thrust(0.05);
                     if (held[2])
                         ship.rotate(0.05);
+
+                    if (held[3]) {
+                        System.out.println("Disconnected");
+                        clients.get(i).disconnect();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -76,13 +81,19 @@ class Server extends Thread {
 
         ArrayList<InputData[]> inputData = new ArrayList<>();
 
-        for (Connection c : clients) {
-            InputData[] data = c.getQueuedInputData();
+        for (int i = clients.size() - 1; i >= 0; i--) {
+            Connection client = clients.get(i);
+
+            if (client.socket.isClosed()) {
+                clients.remove(i);
+                continue;
+            }
+
+            InputData[] data = client.getQueuedInputData();
             inputData.add(data);
 
-            c.removeQueuedInputData(data.length - 1);
+            client.removeQueuedInputData(data.length - 1);
         }
-
 
         // Update the world
 

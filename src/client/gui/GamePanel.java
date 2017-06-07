@@ -11,7 +11,7 @@ public class GamePanel extends JPanel {
     private final int width, height;
 
     private final InputManager inputManager;
-    private final String[] keys = {"a", "w", "d"};
+    private final String[] keys = {"a", "w", "d", "q"};
 
     private Drawable[] shapes;
     private Point focus;

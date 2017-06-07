@@ -12,6 +12,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 class Connection extends Thread {
+    Socket socket;
+
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
@@ -21,7 +23,7 @@ class Connection extends Thread {
     private ShapeData outputData;
 
     Connection(Socket socket) throws IOException {
-        Socket socket1 = socket;
+        this.socket = socket;
 
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
@@ -37,6 +39,17 @@ class Connection extends Thread {
         outputData = new ShapeData();
 
         start();
+    }
+
+    /**
+     * Ends the connection to the server.
+     */
+    void disconnect() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -63,15 +76,26 @@ class Connection extends Thread {
     /**
      * Sets the current data to be sent to the client.
      */
-    public void setOutputData(ShapeData outputData) {
+    void setOutputData(ShapeData outputData) {
         this.outputData = outputData;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (!socket.isClosed()) {
             try {
-                queuedInputData.add((InputData) in.readObject());
+                InputData data = (InputData) in.readObject();
+
+                if (data.held[3]) {
+                    in.close();
+                    out.close();
+                    socket.close();
+
+                    break;
+                }
+
+                queuedInputData.add(data);
+
                 out.writeObject(outputData);
                 out.reset();
             } catch (IOException | ClassNotFoundException e) {

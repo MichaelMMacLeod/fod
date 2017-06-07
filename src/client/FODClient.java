@@ -33,7 +33,7 @@ class FODClient {
         double previous = System.currentTimeMillis();
         double lag = 0;
 
-        while (true) {
+        while (!client.socket.isClosed()) {
             double current = System.currentTimeMillis();
             double elapsed = current - previous;
             previous = current;
@@ -50,6 +50,8 @@ class FODClient {
                 lag -= MS_PER_UPDATE;
             }
         }
+
+
     }
 
     private static void startGUI() {
