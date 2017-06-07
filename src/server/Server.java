@@ -1,20 +1,29 @@
 package server;
 
+import common.drawable.Bullet;
+import common.drawable.Drawable;
 import common.drawable.Ship;
 import common.message.InputData;
 import common.message.ShapeData;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 class Server extends Thread {
     private final ArrayList<Connection> clients = new ArrayList<>();
 
     private ServerSocket server;
 
+    private ArrayList<Bullet> bullets;
+
     Server(int port) throws IOException {
         server = new ServerSocket(port);
+
+        bullets = new ArrayList<>();
 
         start();
     }
@@ -48,6 +57,7 @@ class Server extends Thread {
             for (int j = 0; j < inputData.get(i).length; j++) {
                 try {
                     boolean[] held = inputData.get(i)[j].held;
+                    boolean[] pressed = inputData.get(i)[j].pressed;
 
                     if (held[0])
                         ship.rotate(-0.05);
@@ -56,10 +66,14 @@ class Server extends Thread {
                     if (held[2])
                         ship.rotate(0.05);
 
-                    if (held[3]) {
-                        System.out.println("Disconnected");
-                        clients.get(i).disconnect();
-                    }
+                    if (pressed[4])
+                        bullets.add(
+                                new Bullet(
+                                        new Point2D.Double(
+                                                2 * Math.cos(ship.getRotation()),
+                                                2 * Math.sin(ship.getRotation())
+                                        ),
+                                        ship.getFillColor()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -67,10 +81,14 @@ class Server extends Thread {
 
             ship.transform();
         }
+
+        for (Bullet bullet : bullets) {
+            bullet.transform();
+        }
     }
 
     void update() {
-        // Get all ships
+        // Get all ships and bullets
 
         Ship[] ships = new Ship[clients.size()];
 
@@ -81,30 +99,30 @@ class Server extends Thread {
 
         ArrayList<InputData[]> inputData = new ArrayList<>();
 
-        for (int i = clients.size() - 1; i >= 0; i--) {
-            Connection client = clients.get(i);
-
-            if (client.socket.isClosed()) {
-                clients.remove(i);
-                continue;
-            }
-
-            InputData[] data = client.getQueuedInputData();
+        for (Connection c : clients) {
+            InputData[] data = c.getQueuedInputData();
             inputData.add(data);
 
-            client.removeQueuedInputData(data.length - 1);
+            c.removeQueuedInputData(data.length - 1);
         }
 
         // Update the world
 
         updateShips(ships, inputData);
 
+        // get all elements
+
+        ArrayList<Drawable> all = new ArrayList<>();
+        all.addAll(Arrays.asList((Drawable[]) ships));
+        all.addAll(bullets);
+        Drawable[] allArray = all.toArray(new Drawable[0]);
+
         // Transmit shape data to clients
 
         ShapeData[] shapeData = new ShapeData[ships.length];
 
         for (int i = 0; i < shapeData.length; i++)
-            shapeData[i] = new ShapeData(ships[i].getCenter(), ships);
+            shapeData[i] = new ShapeData(ships[i].getCenter(), allArray);
 
         for (int i = 0; i < shapeData.length; i++)
             clients.get(i).setOutputData(shapeData[i]);

@@ -3,26 +3,21 @@ package common.drawable;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
-public class Ship extends Poly implements VectorMovement {
+public class Bullet extends Poly implements VectorMovement {
     private final Point2D.Double vector;
 
     private double dx, dy, dt;
 
     private double rotation;
 
-    public Ship() {
-        this(Color.BLACK);
+    public Bullet(Point2D.Double vector, Color color) {
+        super(color);
+
+        this.vector = vector;
     }
 
-    public Ship(Color outlineColor) {
-        super(outlineColor);
-
-        vector = new Point2D.Double(0, 0);
-    }
-
-    public double getRotation() {
-        return rotation;
-    }
+    @Override
+    public void thrust(double force) {}
 
     @Override
     public void transform() {
@@ -52,13 +47,6 @@ public class Ship extends Poly implements VectorMovement {
     }
 
     @Override
-    public void removeTransformation() {
-        dx = 0;
-        dy = 0;
-        dt = 0;
-    }
-
-    @Override
     public void rotate(double dt) {
         this.dt += dt;
     }
@@ -70,8 +58,9 @@ public class Ship extends Poly implements VectorMovement {
     }
 
     @Override
-    public void thrust(double force) {
-        vector.x += force * Math.cos(rotation);
-        vector.y += force * Math.sin(rotation);
+    public void removeTransformation() {
+        dx = 0;
+        dy = 0;
+        dt = 0;
     }
 }
