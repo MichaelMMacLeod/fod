@@ -86,6 +86,9 @@ class Server extends Thread {
                 }
             }
 
+            ship.getVector().x *= 0.99;
+            ship.getVector().y *= 0.99;
+
             ship.transform();
         }
 
