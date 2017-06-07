@@ -11,9 +11,25 @@ public class Bullet extends Poly implements VectorMovement {
     private double rotation;
 
     public Bullet(Point2D.Double vector, Color color) {
-        super(color);
+        super(color,
+                new Point2D.Double[] {
+                        new Point2D.Double(-10, -10),
+                        new Point2D.Double(10, -10),
+                        new Point2D.Double(10, 10),
+                        new Point2D.Double(-10, 10)
+
+                });
 
         this.vector = vector;
+    }
+
+    public Point2D.Double getVector() {
+        return vector;
+    }
+
+    public void setVector(double x, double y) {
+        vector.x = x;
+        vector.y = y;
     }
 
     @Override

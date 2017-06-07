@@ -66,14 +66,21 @@ class Server extends Thread {
                     if (held[2])
                         ship.rotate(0.05);
 
-                    if (pressed[4])
-                        bullets.add(
-                                new Bullet(
-                                        new Point2D.Double(
-                                                2 * Math.cos(ship.getRotation()),
-                                                2 * Math.sin(ship.getRotation())
-                                        ),
-                                        ship.getFillColor()));
+                    if (pressed[4]) {
+                        Bullet newBullet = new Bullet(
+                                new Point2D.Double(
+                                        2 * Math.cos(ship.getRotation()),
+                                        2 * Math.sin(ship.getRotation())
+                                ),
+                                ship.getFillColor());
+                        newBullet.translate(ship.getCenter().x, ship.getCenter().y);
+                        newBullet.setVector(
+                                ship.getVector().x + newBullet.getVector().x,
+                                ship.getVector().y + newBullet.getVector().y);
+                        newBullet.rotate(ship.getRotation());
+
+                        bullets.add(newBullet);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

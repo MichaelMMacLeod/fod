@@ -14,6 +14,12 @@ public class Poly implements Drawable {
         this(Color.BLACK);
     }
 
+    Poly(Color fillColor, Point2D.Double[] points) {
+        center = new Point2D.Double(0, 0);
+        this.points = points;
+        this.fillColor = fillColor;
+    }
+
     Poly(Color fillColor) {
         center = new Point2D.Double(0, 0);
         points = new Point2D.Double[] {

@@ -20,6 +20,10 @@ public class Ship extends Poly implements VectorMovement {
         vector = new Point2D.Double(0, 0);
     }
 
+    public Point2D.Double getVector() {
+        return vector;
+    }
+
     public double getRotation() {
         return rotation;
     }
