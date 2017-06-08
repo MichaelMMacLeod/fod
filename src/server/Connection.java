@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 class Connection extends Thread {
-    Socket socket;
+    final Socket socket;
 
     private ObjectOutputStream out;
     private ObjectInputStream in;
