@@ -12,6 +12,8 @@ public class Ship extends Poly implements VectorMovement {
 
     private boolean alive = true;
 
+    private int health = 10;
+
     public Ship() {
         this(Color.BLACK);
     }
@@ -22,7 +24,18 @@ public class Ship extends Poly implements VectorMovement {
         vector = new Point2D.Double(0, 0);
     }
 
-    public void kill() {
+    public int getHealth() {
+        return health;
+    }
+
+    public void damage(int amount) {
+        health -= amount;
+
+        if (health <= 0)
+            kill();
+    }
+
+    private void kill() {
         alive = false;
     }
 

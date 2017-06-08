@@ -110,9 +110,8 @@ class Server extends Thread {
             } else {
                 for (Ship ship : ships) {
                     if (ship.isAlive() && bullet.source != ship && ship.overlaps(bullet)) {
-                        ship.kill();
+                        ship.damage(1);
                         bullets.remove(bullet);
-                        System.out.println(true);
                     }
                 }
             }
