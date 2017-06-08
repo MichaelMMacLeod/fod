@@ -8,18 +8,18 @@ import java.io.Serializable;
 public class ShapeData implements Serializable {
     public final Point focus;
     public final Drawable[] shapes;
-    public final boolean clientIsAlive;
+    public final int clientShipHealth;
 
-    public ShapeData(Point focus, Drawable[] shapes, boolean clientIsAlive) {
+    public ShapeData(Point focus, Drawable[] shapes, int clientShipHealth) {
         this.focus = focus;
         this.shapes = shapes;
-        this.clientIsAlive = clientIsAlive;
+        this.clientShipHealth = clientShipHealth;
     }
 
     /**
      * Creates a blank message.
      */
     public ShapeData() {
-        this(new Point(0, 0), new Drawable[0], true);
+        this(new Point(0, 0), new Drawable[0], 0);
     }
 }
