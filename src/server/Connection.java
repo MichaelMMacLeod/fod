@@ -100,6 +100,14 @@ class Connection extends Thread {
                 out.reset();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+
+                try {
+                    out.close();
+                    in.close();
+                    socket.close();
+                } catch (IOException i) {
+                    i.printStackTrace();
+                }
             }
         }
     }
