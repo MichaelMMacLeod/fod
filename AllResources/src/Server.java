@@ -1,11 +1,3 @@
-package server;
-
-import common.drawable.Bullet;
-import common.drawable.Drawable;
-import common.drawable.Ship;
-import common.message.InputData;
-import common.message.ShapeData;
-
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.net.ServerSocket;

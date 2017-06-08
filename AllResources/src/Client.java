@@ -1,10 +1,3 @@
-package client;
-
-import client.gui.GamePanel;
-import common.message.InputData;
-import common.message.ShapeData;
-import server.FODServer;
-
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;

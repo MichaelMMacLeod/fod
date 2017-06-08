@@ -1,5 +1,3 @@
-package server;
-
 import common.drawable.Ship;
 import common.message.InputData;
 import common.message.ShapeData;

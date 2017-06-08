@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AllResources/AllResources.iml" filepath="$PROJECT_DIR$/AllResources/AllResources.iml" />
       <module fileurl="file://$PROJECT_DIR$/fod.iml" filepath="$PROJECT_DIR$/fod.iml" />
     </modules>
   </component>
