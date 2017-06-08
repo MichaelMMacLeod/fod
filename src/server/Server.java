@@ -74,8 +74,8 @@ class Server extends Thread {
                     if (pressed[4]) {
                         Bullet newBullet = new Bullet(
                                 new Point2D.Double(
-                                        10 * Math.cos(ship.getRotation()),
-                                        10 * Math.sin(ship.getRotation())
+                                        6 * Math.cos(ship.getRotation()),
+                                        6 * Math.sin(ship.getRotation())
                                 ),
                                 ship);
                         newBullet.translate(ship.getCenter().x, ship.getCenter().y);
