@@ -86,6 +86,9 @@ class Server extends Thread {
 
                         bullets.add(newBullet);
                     }
+
+                    if (pressed[5])
+                        ship.thrust(5);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
