@@ -69,7 +69,7 @@ public class Poly implements Drawable {
         int[] xPointsOther = new int[otherPoints.length];
         int[] yPointsOther = new int[otherPoints.length];
 
-        for (int i = 0; i < points.length; i++) {
+        for (int i = 0; i < otherPoints.length; i++) {
             xPointsOther[i] = otherPoints[i].x;
             yPointsOther[i] = otherPoints[i].y;
         }
