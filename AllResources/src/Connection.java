@@ -1,7 +1,3 @@
-import common.drawable.Ship;
-import common.message.InputData;
-import common.message.ShapeData;
-
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;

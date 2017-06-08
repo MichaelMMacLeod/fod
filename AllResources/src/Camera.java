@@ -1,5 +1,3 @@
-import common.drawable.Drawable;
-
 import java.awt.*;
 
 final class Camera {
