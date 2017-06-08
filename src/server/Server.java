@@ -152,7 +152,7 @@ class Server extends Thread {
         ShapeData[] shapeData = new ShapeData[ships.length];
 
         for (int i = 0; i < shapeData.length; i++)
-            shapeData[i] = new ShapeData(ships[i].getCenter(), allArray);
+            shapeData[i] = new ShapeData(ships[i].getCenter(), allArray, ships[i].isAlive());
 
         for (int i = 0; i < shapeData.length; i++)
             clients.get(i).setOutputData(shapeData[i]);

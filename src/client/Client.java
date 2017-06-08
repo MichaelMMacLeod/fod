@@ -5,6 +5,7 @@ import common.message.InputData;
 import common.message.ShapeData;
 import server.FODServer;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -42,6 +43,9 @@ class Client extends Thread {
             while (!socket.isClosed()) {
                 try {
                     ShapeData shapeData = (ShapeData) in.readObject();
+
+                    if (!shapeData.clientIsAlive)
+                        gamePanel.setBackground(Color.GRAY);
 
                     gamePanel.updateVisuals(shapeData.focus, shapeData.shapes);
                 } catch (ClassNotFoundException e) {
