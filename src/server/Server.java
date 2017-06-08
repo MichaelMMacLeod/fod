@@ -8,10 +8,12 @@ import common.message.ShapeData;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class Server extends Thread {
     private final ArrayList<Connection> clients = new ArrayList<>();
@@ -54,6 +56,9 @@ class Server extends Thread {
         for (int i = 0; i < inputData.size(); i++) {
             Ship ship = ships[i];
 
+            if (!ship.isAlive())
+                continue;
+
             for (int j = 0; j < inputData.get(i).length; j++) {
                 try {
                     boolean[] held = inputData.get(i)[j].held;
@@ -72,7 +77,7 @@ class Server extends Thread {
                                         10 * Math.cos(ship.getRotation()),
                                         10 * Math.sin(ship.getRotation())
                                 ),
-                                ship.getFillColor());
+                                ship);
                         newBullet.translate(ship.getCenter().x, ship.getCenter().y);
                         newBullet.setVector(
                                 ship.getVector().x + newBullet.getVector().x,
@@ -97,8 +102,16 @@ class Server extends Thread {
 
             bullet.transform();
 
-            if (bullet.shouldBeRemoved())
-                bullets.remove(bullets.size() - 1);
+            if (bullet.shouldBeRemoved()) {
+                bullets.remove(bullet);
+            } else {
+                for (Ship ship : ships) {
+                    if (bullet.source != ship && ship.overlaps(bullet)) {
+                        ship.kill();
+                        bullets.remove(bullet);
+                    }
+                }
+            }
         }
     }
 
@@ -107,8 +120,9 @@ class Server extends Thread {
 
         Ship[] ships = new Ship[clients.size()];
 
-        for (int i = 0; i < ships.length; i++)
+        for (int i = 0; i < ships.length; i++) {
             ships[i] = clients.get(i).getShip();
+        }
 
         // Get all input data
 

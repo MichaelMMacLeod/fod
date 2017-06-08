@@ -13,8 +13,10 @@ public class Bullet extends Poly implements VectorMovement {
 
     private final double creationTime;
 
-    public Bullet(Point2D.Double vector, Color color) {
-        super(color,
+    public final Ship source;
+
+    public Bullet(Point2D.Double vector, Ship source) {
+        super(source.getFillColor(),
                 new Point2D.Double[] {
                         new Point2D.Double(-10, -10),
                         new Point2D.Double(10, -10),
@@ -26,6 +28,8 @@ public class Bullet extends Poly implements VectorMovement {
         this.vector = vector;
 
         creationTime = System.currentTimeMillis();
+
+        this.source = source;
     }
 
     public boolean shouldBeRemoved() {

@@ -1,14 +1,16 @@
 package common.drawable;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 
 public class Poly implements Drawable {
     final Point2D.Double center;
 
     final Point2D.Double[] points;
 
-    private Color fillColor;
+    Color fillColor;
 
     Poly() {
         this(Color.BLACK);
@@ -48,5 +50,37 @@ public class Poly implements Drawable {
     @Override
     public Color getFillColor() {
         return fillColor;
+    }
+
+    @Override
+    public boolean overlaps(Drawable other) {
+        Point[] points = getPoints();
+
+        int[] xPoints = new int[points.length];
+        int[] yPoints = new int[points.length];
+
+        for (int i = 0; i < points.length; i++) {
+            xPoints[i] = points[i].x;
+            yPoints[i] = points[i].y;
+        }
+
+        Point[] otherPoints = other.getPoints();
+
+        int[] xPointsOther = new int[otherPoints.length];
+        int[] yPointsOther = new int[otherPoints.length];
+
+        for (int i = 0; i < points.length; i++) {
+            xPointsOther[i] = otherPoints[i].x;
+            yPointsOther[i] = otherPoints[i].y;
+        }
+
+        Polygon polygon = new Polygon(xPoints, yPoints, points.length);
+        Polygon polygonOther = new Polygon(xPointsOther, yPointsOther, otherPoints.length);
+
+        Area polygonArea = new Area(polygon);
+
+        polygonArea.intersect(new Area(polygonOther));
+
+        return !polygonArea.isEmpty();
     }
 }

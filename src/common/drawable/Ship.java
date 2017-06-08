@@ -10,6 +10,8 @@ public class Ship extends Poly implements VectorMovement {
 
     private double rotation;
 
+    private boolean alive = true;
+
     public Ship() {
         this(Color.BLACK);
     }
@@ -18,6 +20,14 @@ public class Ship extends Poly implements VectorMovement {
         super(outlineColor);
 
         vector = new Point2D.Double(0, 0);
+    }
+
+    public void kill() {
+        alive = false;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 
     public Point2D.Double getVector() {

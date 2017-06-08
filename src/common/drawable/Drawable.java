@@ -13,4 +13,9 @@ public interface Drawable extends Serializable {
      * @return the java.awt.Color which outlines the drawable.
      */
     Color getFillColor();
+
+    /**
+     * @return true if the two Drawables overlap, false otherwise.
+     */
+    boolean overlaps(Drawable other);
 }
