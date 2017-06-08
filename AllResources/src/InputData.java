@@ -1,5 +1,9 @@
 import java.io.Serializable;
 
+/**
+ * InputData is a packet of information which is meant to be sent from the client to the server.
+ * It tells the server what keys the client has pressed or held.
+ */
 public class InputData implements Serializable {
     public final String[] keys;
     public final boolean[] pressed;

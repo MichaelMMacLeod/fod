@@ -1,8 +1,19 @@
 import java.awt.*;
 
 final class Camera {
+    /**
+     * No need to instantiate a Camera object.
+     */
     private Camera() {}
 
+    /**
+     * Draws shapes on the screen.
+     * @param g         is the graphics object to draw on.
+     * @param focus     is the location to center the window on.
+     * @param drawables is the list of shapes to draw.
+     * @param width     is the width of the window.
+     * @param height    is the height of the window.
+     */
     static void draw(Graphics g, Point focus, Drawable[] drawables, int width, int height) {
         for (Drawable shape : drawables) {
             Point[] points = shape.getPoints();

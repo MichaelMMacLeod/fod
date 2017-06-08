@@ -5,17 +5,41 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * A Connection object is what links the client to the server.
+ *
+ * It keeps track of the client's Ship, and handles output and input streams for the server.
+ */
 class Connection extends Thread {
     final Socket socket;
 
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
+    /**
+     * The client's ship.
+     */
     private Ship ship;
 
+    /**
+     * Holds a list of all input data the client has made since removeQueuedInputData was called.
+     *
+     * We 'queue' the input data so that a slow client-server connection won't loose anything. When the server reads
+     * the input data, it calls removeQueuedInputData with the size of data it read.
+     */
     private ArrayList<InputData> queuedInputData;
+
+    /**
+     * The current data for the client to display on screen.
+     */
     private ShapeData outputData;
 
+    /**
+     * Creates a Connection between the client and the server.
+     *
+     * @param socket is the socket.
+     * @throws IOException if the output/input streams fail to be created.
+     */
     Connection(Socket socket) throws IOException {
         this.socket = socket;
 
@@ -29,7 +53,7 @@ class Connection extends Thread {
 
         queuedInputData = new ArrayList<>();
 
-        // Store a blank message in outputData until we receive client.input from the server.
+        // Store a blank message in outputData until we receive input from the server.
         outputData = new ShapeData();
 
         start();
@@ -37,6 +61,8 @@ class Connection extends Thread {
 
     /**
      * Ends the connection to the server.
+     *
+     * note: not actually ever used; // TODO: delete this method (unused)
      */
     void disconnect() {
         try {
@@ -47,7 +73,7 @@ class Connection extends Thread {
     }
 
     /**
-     * @return all the client.input data received from the client.
+     * @return all the input data received from the client.
      */
     InputData[] getQueuedInputData() {
         InputData[] data = queuedInputData.toArray(new InputData[0]);
@@ -59,7 +85,7 @@ class Connection extends Thread {
     }
 
     /**
-     * Removes queued client.input data.
+     * Removes queued input data.
      * @param amount is the number of items to remove from the start of the list.
      */
     void removeQueuedInputData(int amount) {
@@ -74,6 +100,9 @@ class Connection extends Thread {
         this.outputData = outputData;
     }
 
+    /**
+     * Send and receive data constantly in another thread.
+     */
     @Override
     public void run() {
         while (!socket.isClosed()) {
@@ -91,7 +120,7 @@ class Connection extends Thread {
                 queuedInputData.add(data);
 
                 out.writeObject(outputData);
-                out.reset();
+                out.reset(); // we need this. for some reason. a nasty hack. // TODO: nasty. hack. bad.
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
 

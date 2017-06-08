@@ -4,13 +4,29 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * A Server object keeps track of all the connections to the server, and runs the collision detection and other logic.
+ */
 class Server extends Thread {
+    /**
+     * List of connections to the server.
+     */
     private final ArrayList<Connection> clients = new ArrayList<>();
 
     private ServerSocket server;
 
+    /**
+     * list of bullets in the world.
+     *
+     * note: this is a hack. We should be storing all objects here, not just the bullets.
+     */
     private ArrayList<Bullet> bullets;
 
+    /**
+     * Creates a Server.
+     * @param port is the port
+     * @throws IOException if it can't create a ServerSocket with this port.
+     */
     Server(int port) throws IOException {
         server = new ServerSocket(port);
 
@@ -19,6 +35,9 @@ class Server extends Thread {
         start();
     }
 
+    /**
+     * Add new connections when they pop up.
+     */
     @Override
     public void run() {
         try {
@@ -34,6 +53,9 @@ class Server extends Thread {
         }
     }
 
+    /**
+     * Add new connections when they pop up.
+     */
     private void listenForConnections() throws IOException {
         System.out.println("Began listening for connections.");
         while (true) {
@@ -41,6 +63,13 @@ class Server extends Thread {
         }
     }
 
+    /**
+     * A big ugly block of code that does all the updating for the server.
+     *
+     * Moves ships, and does collision detection.
+     * @param ships     is the list of all ships tracked by the server.
+     * @param inputData is the collection of data for each client.
+     */
     private void updateShips(Ship[] ships, ArrayList<InputData[]> inputData) {
         for (int i = 0; i < inputData.size(); i++) {
             Ship ship = ships[i];
@@ -96,7 +125,7 @@ class Server extends Thread {
 
             if (bullet.shouldBeRemoved()) {
                 bullets.remove(bullet);
-            } else {
+            } else { // check collisions
                 for (Ship ship : ships) {
                     if (ship.isAlive() && bullet.source != ship && ship.overlaps(bullet)) {
                         ship.damage(1);
@@ -108,6 +137,9 @@ class Server extends Thread {
         }
     }
 
+    /**
+     * Collects client ships, input, and then updates the state of the world.
+     */
     void update() {
         // Get all ships and bullets
 
@@ -117,7 +149,7 @@ class Server extends Thread {
             ships[i] = clients.get(i).getShip();
         }
 
-        // Get all client.input data
+        // Get all input data
 
         ArrayList<InputData[]> inputData = new ArrayList<>();
 
@@ -132,7 +164,7 @@ class Server extends Thread {
 
         updateShips(ships, inputData);
 
-        // get all elements
+        // collapse all ships and bullets into one array
 
         ArrayList<Drawable> all = new ArrayList<>();
         all.addAll(Arrays.asList((Drawable[]) ships));

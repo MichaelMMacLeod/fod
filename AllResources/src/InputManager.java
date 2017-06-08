@@ -5,6 +5,35 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * I wrote this class a long time ago and forgot how it works.
+ *
+ * Basically just instantiate a InputManager object, then use .addKey() to tell it which keys to track.
+ * .held() returns true when a key is down.
+ * .pressed() returns true when a key is down and .pressed() has not been called before when the key is down.
+ *
+ * held:
+ * a is down
+ * held() --> true
+ * a is down
+ * held() --> true
+ * a is up
+ * held() --> false
+ * a is down
+ * held() --> true
+ *
+ * pressed:
+ * a is down
+ * pressed() --> true
+ * a is down
+ * pressed() --> false
+ * a is up
+ * pressed() --> false
+ * a is down
+ * pressed() --> true
+ *
+ * This class also handles mouse presses/held/location, but it's not used in FOD currently.
+ */
 public class InputManager {
     private final JPanel panel;
 

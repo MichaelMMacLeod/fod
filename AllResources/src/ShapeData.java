@@ -1,6 +1,10 @@
 import java.awt.*;
 import java.io.Serializable;
 
+/**
+ * ShapeData is a packet of information which is meant to be sent from the server to the client.
+ * It tells the client where and what to draw on screen.
+ */
 public class ShapeData implements Serializable {
     public final Point focus;
     public final Drawable[] shapes;
