@@ -2,11 +2,27 @@
 A multiplayer spaceship arena
 
 # How to run FOD
-1. Start the server
+1. compile FOD
 ```
-   java FODServer  
+    cd fod/AllResources/src
+    javac *.java
 ```
-3. Start the client
+2. Start the FOD server
 ```
-   java FODClient <server ip adress>
+   java FODServer
+```
+3. Start the client. Replace server-ip with the server's ip address.
+```
+   cd fod/AllResources/src
+   java FODClient server-ip
+```
+4. Start more clients
+#Controls
+```
+rotate ship: A/D
+thrust: W
+quick jump: S
+fire bullets: F
+close client: ^C/close window
+close server: ^C
 ```
