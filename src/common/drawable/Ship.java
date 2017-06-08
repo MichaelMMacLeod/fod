@@ -12,7 +12,7 @@ public class Ship extends Poly implements VectorMovement {
 
     private boolean alive = true;
 
-    private int health = 10;
+    private double health = 10;
 
     public Ship() {
         this(Color.BLACK);
@@ -24,11 +24,16 @@ public class Ship extends Poly implements VectorMovement {
         vector = new Point2D.Double(0, 0);
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
-    public void damage(int amount) {
+    public void heal(double amount) {
+        if (health + amount < 10)
+            health += amount;
+    }
+
+    public void damage(double amount) {
         health -= amount;
 
         if (health <= 0)

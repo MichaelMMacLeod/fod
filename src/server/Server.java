@@ -8,12 +8,9 @@ import common.message.ShapeData;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 class Server extends Thread {
     private final ArrayList<Connection> clients = new ArrayList<>();
@@ -111,6 +108,7 @@ class Server extends Thread {
                 for (Ship ship : ships) {
                     if (ship.isAlive() && bullet.source != ship && ship.overlaps(bullet)) {
                         ship.damage(1);
+                        bullet.source.heal(0.5);
                         bullets.remove(bullet);
                     }
                 }

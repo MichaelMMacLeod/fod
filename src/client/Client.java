@@ -44,7 +44,7 @@ class Client extends Thread {
                 try {
                     ShapeData shapeData = (ShapeData) in.readObject();
 
-                    int health = shapeData.clientShipHealth;
+                    double health = shapeData.clientShipHealth;
                     gamePanel.setBackground(new Color(
                             (int) (255.0 - (health / 10.0)),
                             (int) (255.0 * (health / 10.0)),
